@@ -7,13 +7,13 @@ const registerUser = async (req, res) => {
     const { nombre, email, password } = req.body;
 const rolid = req.body.rol||1;
     try {
-        // Verificar si el usuario ya existe
+      
         const existingUser = await getUserByEmail(email);
         if (existingUser) {
             return res.status(400).json({ message: 'El usuario ya existe' });
         }
 
-        // Crear el usuario
+        
         const newUser = await createUser({ nombre, email, password,rolid });
         res.status(201).json({ message: 'Usuario registrado con éxito', user: newUser });
     } catch (error) {
