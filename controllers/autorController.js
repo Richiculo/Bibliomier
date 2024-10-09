@@ -1,7 +1,7 @@
 
 const { createAutor, getAutores, getAutorById, updateAutor, deleteAutor } = require('../models/autorModel');
 
-// Controlador para agregar un nuevo autor
+
 const addAutor = async (req, res) => {
     const { Nombre, Biografia, Nacionalidad } = req.body;
     try {
@@ -16,7 +16,7 @@ const addAutor = async (req, res) => {
     }
 };
 
-// Controlador para obtener todos los autores
+
 const getAutor = async (req, res) => {
     try {
         const autores = await getAutores();
@@ -30,7 +30,7 @@ const getAutor = async (req, res) => {
     }
 };
 
-// Controlador para obtener un autor por ID
+
 const getAutorByIdController = async (req, res) => {
     const { id } = req.params;
     try {
@@ -45,7 +45,7 @@ const getAutorByIdController = async (req, res) => {
     }
 };
 
-// Controlador para actualizar un autor
+
 const updAutor = async (req, res) => {
     const { id } = req.params;
     const { Nombre, Biografia, Nacionalidad } = req.body;
@@ -64,7 +64,7 @@ const updAutor = async (req, res) => {
     }
 };
 
-// Controlador para eliminar un autor
+
 const delAutor = async (req, res) => {
     const { id } = req.params;
     try {
@@ -85,6 +85,11 @@ const delAutor = async (req, res) => {
 module.exports = {
     addAutor,
     getAutor,
+    getAutorByIdController,
+    updAutor,
+    delAutor
+};
+
     getAutorByIdController,
     updAutor,
     delAutor
