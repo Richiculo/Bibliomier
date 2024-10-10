@@ -1,10 +1,35 @@
 import React from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import BookForm from './BookForm';
+import GetBooksForm from './GetBooksForm';
+import UpdateBookForm from './UpdateBooksForm';
+import DeleteBookForm from './DeleteBooksForm';
 
 const ModificarCatalogo = () => {
     return (
-        <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">Modificar Catálogo de Libros</h2>
-            {/* Implementa aquí las funciones para agregar, actualizar, eliminar libros */}
+        <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-lg space-y-6">
+            <h2 className="text-2xl font-bold text-gray-700 mb-4">Modificar Catálogo</h2>
+            <div className="space-y-4">
+                <Link to="agregar-libro" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Agregar Libro
+                </Link>
+                <Link to="obtener-libros" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Obtener Libros
+                </Link>
+                <Link to="actualizar-libro" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Actualizar Libro
+                </Link>
+                <Link to="eliminar-libro" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Eliminar Libro
+                </Link>
+            </div>
+
+            <Routes>
+                <Route path="agregar-libro" element={<BookForm />} />
+                <Route path="obtener-libros" element={<GetBooksForm />} />
+                <Route path="actualizar-libro" element={<UpdateBookForm />} />
+                <Route path="eliminar-libro" element={<DeleteBookForm />} />
+            </Routes>
         </div>
     );
 };

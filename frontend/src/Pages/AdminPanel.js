@@ -3,16 +3,11 @@ import { Link } from 'react-router-dom';
 
 const AdminPanel = () => {
     return (
-        <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">Panel de Administración</h2>
-
+        <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-lg space-y-6">
+            <h2 className="text-2xl font-bold text-gray-700 mb-4">Panel de Administración - Gestionar Libros</h2>
             <div className="space-y-4">
-                {/* Links a diferentes secciones administrativas */}
-                <Link to="/admin/catalogo" className="block text-blue-500 hover:underline">
-                    Modificar Catálogo de Libros
-                </Link>
-                <Link to="/admin/usuarios" className="block text-blue-500 hover:underline">
-                    Administrar Usuarios
+                <Link to="/admin/modificar-catalogo" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Modificar Catálogo
                 </Link>
             </div>
         </div>

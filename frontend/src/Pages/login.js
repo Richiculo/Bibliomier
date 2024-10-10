@@ -22,7 +22,7 @@ const Login = ({ setIsLoggedIn, setUser }) => {
             // Actualizar el estado con los datos del usuario, incluyendo el rol
             setUser({ nombre: response.data.nombre, rol: rol });
             setIsLoggedIn(true);
-            navigate("/");
+            navigate("/admin");
         } catch (error) {
             setError('Email o contraseña incorrectos');
         }

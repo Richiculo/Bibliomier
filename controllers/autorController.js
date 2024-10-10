@@ -90,7 +90,3 @@ module.exports = {
     delAutor
 };
 
-    getAutorByIdController,
-    updAutor,
-    delAutor
-};

@@ -8,7 +8,7 @@ const createLibro = async ({ Titulo, Genero, AutorID, EditorialID, CategoriaID,p
             'INSERT INTO libros (Titulo, Genero, AutorID, EditorialID, CategoriaID) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             [Titulo, Genero, AutorID, EditorialID, CategoriaID]
         );
-        return result.rows[0]; // Retornamos el libro recién creado
+        return result.rows[0];
     } catch (error) {
         console.error('Error creando el libro', error);
         throw error;
@@ -70,7 +70,7 @@ const updateLibro = async (id, { Titulo, Genero, AutorID, EditorialID, Categoria
              WHERE LibroID = $6 RETURNING *`,
             [Titulo, Genero, AutorID, EditorialID, CategoriaID, id]
         );
-        return result.rows[0]; // Devolvemos el libro actualizado
+        return result.rows[0];
     } catch (error) {
         console.error('Error actualizando el libro', error);
         throw error;
@@ -80,8 +80,8 @@ const updateLibro = async (id, { Titulo, Genero, AutorID, EditorialID, Categoria
 // Función para eliminar un libro
 const deleteLibro = async (id) => {
     try {
-        const result = await pool.query('DELETE FROM libros WHERE LibroID = $1 RETURNING *', [id]);
-        return result.rows[0]; // Devolvemos el libro eliminado
+        const result = await pool.query('DELETE FROM libros WHERE LibroID = $1', [id]);
+        return result.rowCount;
     } catch (error) {
         console.error('Error eliminando el libro', error);
         throw error;
@@ -97,3 +97,5 @@ module.exports = {
     getLibrosbyid,
     prestamo
 };
+
+
