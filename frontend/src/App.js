@@ -10,6 +10,7 @@ import BookForm from "./Pages/BookForm";
 import DeleteBookForm from "./Pages/DeleteBooksForm";
 import UpdateBookForm from "./Pages/UpdateBooksForm";
 import GetBooksForm from "./Pages/GetBooksForm";
+import AdministrarUsuario from "./Pages/AdministrarUsuario";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,6 +38,7 @@ function App() {
                         <Route path="/admin/obtener-libros" element={<GetBooksForm />} />
                         <Route path="/admin/actualizar-libro" element={<UpdateBookForm />} />
                         <Route path="/admin/eliminar-libro" element={<DeleteBookForm />} />
+                        <Route path="/admin/administrar-usuarios" element={<AdministrarUsuario />} />
                     </>
                 )}
             </Routes>

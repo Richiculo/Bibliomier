@@ -35,8 +35,6 @@ const Books = () => {
                 {books.map((book) => (
                     <li key={book.libroid}>
                         <Link to={`/libros/${book.libroid}`}>{book.titulo}</Link>
-                        <Link to={`/editar-libro/${book.libroid}`}>Modificar</Link>
-
                     </li>
                 ))}
             </ul>

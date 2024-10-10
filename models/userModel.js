@@ -29,7 +29,33 @@ const getUserByEmail = async (email) => {
     }
 };
 
+const getUsers = async () => {
+    try {
+        const result = await pool.query('SELECT * FROM Usuario');
+        return result.rows;
+    } catch (error) {
+        console.error('Error obteniendo los usuarios', error);
+        throw error;
+    }
+};
+
+const updateUserRole = async (userId, newRole) => {
+    try {
+        const result = await pool.query(
+            'UPDATE Usuario SET rolid = $1 WHERE usuarioid = $2 RETURNING *',
+            [newRole, userId]
+        );
+        console.log('Resultado de la actualización:', result.rows[0]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error actualizando el rol del usuario en la base de datos:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     createUser,
-    getUserByEmail
+    getUserByEmail,
+    getUsers,
+    updateUserRole
 };
