@@ -1,94 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import GetAllUsuarios from './GetAllUsuarios';
+import AdministrarRoles from './AdministrarRoles';
+import Bitacora from '../components/Bitacora';
 
 const AdministrarUsuarios = () => {
-    const [usuarios, setUsuarios] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:3000/api/users')
-            .then((response) => {
-                console.log('Usuarios obtenidos:', response.data);  // Log the data received
-                setUsuarios(response.data);  // Set the users in the state
-            })
-            .catch((error) => {
-                console.error('Error al obtener usuarios:', error);
-            });
-    }, []);
-
-    const handleUpdateRole = (userId, newRole) => {
-        if (!newRole) {
-            alert('Por favor, selecciona un rol.');
-            return;
-        }
-
-        axios.put('http://localhost:3000/api/users/update', { userId, newRole })
-            .then((response) => {
-                alert('Rol actualizado exitosamente');
-                setUsuarios((prev) =>
-                    prev.map((user) =>
-                        user.usuarioid === userId ? { ...user, rolid: newRole } : user
-                    )
-                );
-            })
-            .catch((error) => {
-                console.error('Error al actualizar rol:', error);
-                alert('Error al actualizar el rol');
-            });
-    };
-
     return (
-        <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">Administrar Usuarios</h2>
-            <table className="min-w-full border border-gray-200">
-                <thead>
-                <tr>
-                    <th className="border border-gray-300 p-2">ID</th>
-                    <th className="border border-gray-300 p-2">Nombre</th>
-                    <th className="border border-gray-300 p-2">Correo</th>
-                    <th className="border border-gray-300 p-2">Rol ID</th>
-                    <th className="border border-gray-300 p-2">Rol</th>
-                    <th className="border border-gray-300 p-2">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                {usuarios.map((usuario) => (
-                    <tr key={usuario.usuarioid}>
-                        <td className="border border-gray-300 p-2">{usuario.usuarioid}</td>
-                        <td className="border border-gray-300 p-2">{usuario.nombre_usuario}</td>
-                        <td className="border border-gray-300 p-2">{usuario.correo_electronico}</td>
-                        <td className="border border-gray-300 p-2">{usuario.rolid}</td>
-                        <td className="border border-gray-300 p-2">
-                            <select
-                                value={usuario.newRole || usuario.rolid}
-                                onChange={(e) => {
-                                    const updatedUsuarios = usuarios.map((u) =>
-                                        u.usuarioid === usuario.usuarioid
-                                            ? { ...u, newRole: e.target.value }
-                                            : u
-                                    );
-                                    setUsuarios(updatedUsuarios);
-                                }}
-                                className="p-1 border border-gray-300 rounded"
-                            >
-                                <option value="">Seleccionar rol</option>
-                                <option value="1">Usuario</option>
-                                <option value="2">Miembro</option>
-                                <option value="3">Empleado</option>
-                                <option value="4">Administrador</option>
-                            </select>
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                            <button
-                                onClick={() => handleUpdateRole(usuario.usuarioid, usuario.newRole || usuario.rolid)}
-                                className="bg-blue-500 text-white p-1 rounded"
-                            >
-                                Actualizar Rol
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+        <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-lg space-y-6">
+            <h2 className="text-2xl font-bold text-gray-700 mb-4">Administrar Usuarios</h2>
+            <div className="space-y-4">
+                <Link to="getall-usuarios" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Ver Todos los Usuarios
+                </Link>
+                <Link to="administrar-roles" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Administrar Roles
+                </Link>
+                <Link to="bitacora" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
+                    Ver Bitácora
+                </Link>
+            </div>
+
+            <Routes>
+                <Route path="getall-usuarios" element={<GetAllUsuarios />} />
+                <Route path="administrar-roles" element={<AdministrarRoles />} />
+                <Route path="bitacora" element={<Bitacora />} />
+            </Routes>
         </div>
     );
 };

@@ -10,7 +10,10 @@ import BookForm from "./Pages/BookForm";
 import DeleteBookForm from "./Pages/DeleteBooksForm";
 import UpdateBookForm from "./Pages/UpdateBooksForm";
 import GetBooksForm from "./Pages/GetBooksForm";
-import AdministrarUsuario from "./Pages/AdministrarUsuario";
+import AdministrarUsuarios from "./Pages/AdministrarUsuario";
+import GetAllUsuarios from "./Pages/GetAllUsuarios";
+import AdministrarRoles from "./Pages/AdministrarRoles";
+import Bitacora from "./components/Bitacora";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,7 +41,10 @@ function App() {
                         <Route path="/admin/obtener-libros" element={<GetBooksForm />} />
                         <Route path="/admin/actualizar-libro" element={<UpdateBookForm />} />
                         <Route path="/admin/eliminar-libro" element={<DeleteBookForm />} />
-                        <Route path="/admin/administrar-usuarios" element={<AdministrarUsuario />} />
+                        <Route path="/admin/administrar-usuarios/*" element={<AdministrarUsuarios />} />
+                        <Route path="/admin/administrar-usuarios/getall-usuarios" element={<GetAllUsuarios />} />
+                        <Route path="/admin/administrar-usuarios/administrar-roles" element={<AdministrarRoles />} />
+                        <Route path="/admin/administrar-usuarios/bitacora" element={<Bitacora />} />
                     </>
                 )}
             </Routes>
