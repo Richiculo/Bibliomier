@@ -32,11 +32,18 @@ const Books = () => {
             <button onClick={handleSearch}>Buscar</button>
 
             <ul>
-                {books.map((book) => (
-                    <li key={book.libroid}>
-                        <Link to={`/libros/${book.libroid}`}>{book.titulo}</Link>
-                    </li>
-                ))}
+            {books.length > 0 ? (
+                    books.map((book) => (
+                        <li key={book.libroid}>
+
+                            <Link to={`/libro/${book.libroid}`}>
+                                {book.titulo}
+                            </Link>
+                        </li>
+                    ))
+                ) : (
+                    <li>No se encontraron libros.</li>
+                )}
             </ul>
         </div>
     );

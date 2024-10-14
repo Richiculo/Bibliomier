@@ -30,12 +30,13 @@ const getLibroById = async (req, res) => {
     const libroId = req.params.id;
     try {
         const libro = await getLibrosbyid(libroId);
-        if (!libro) {
-            return res.status(404).json({ error: 'Libro no encontrado' });
+        if (libro.rows.length > 0) { // Asegúrate de usar 'length'
+            res.json(libro.rows[0]);
+        } else {
+            res.status(404).json({ error: 'Libro no encontrado' });
         }
-        res.json(libro);
     } catch (error) {
-        console.error('Error obteniendo el libro', error);
+        console.error('Error obteniendo el libro', error); // Log más detallado
         res.status(500).json({ error: 'Error obteniendo el libro' });
     }
 };

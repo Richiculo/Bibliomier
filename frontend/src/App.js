@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Login from './Pages/login';
 import Books from './Pages/Books';
+import BookDetail from './Pages/BookDetail';
 import AdminPanel from './Pages/AdminPanel';
 import Register from './Pages/Register';
 import ModificarCatalogo from './Pages/ModificarCatalogo';
@@ -14,14 +15,27 @@ import AdministrarUsuarios from "./Pages/AdministrarUsuario";
 import GetAllUsuarios from "./Pages/GetAllUsuarios";
 import AdministrarRoles from "./Pages/AdministrarRoles";
 import Bitacora from "./components/Bitacora";
+import { jwtDecode } from 'jwt-decode';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState({});
 
+    useEffect(() => {
+        // Verificar si hay un token en el localStorage al cargar la aplicación
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const userData = { nombre: decodedToken.nombre, rol: decodedToken.rol }; // Asegúrate de que el nombre esté en el token
+            setUser(userData);
+            setIsLoggedIn(true);
+        }
+    }, []);
+
     const handleLogout = () => {
+        localStorage.removeItem('token'); // Eliminar el token del almacenamiento local
         setIsLoggedIn(false);
-        setUser({});
+        setUser({}); // Reiniciar el estado del usuario
     };
 
     return (
@@ -31,6 +45,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
                 <Route path="/books" element={<Books />} />
+                <Route path="/libro/:id" element={<BookDetail />} />
 
                 {isLoggedIn && user.rol === 4 && (
                     <>

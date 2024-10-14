@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import moment from 'moment-timezone';
 
 const Bitacora = () => {
     const [logs, setLogs] = useState([]);
@@ -38,6 +39,7 @@ const Bitacora = () => {
             <table id="logTable" className="min-w-full bg-white">
                 <thead>
                     <tr>
+                        <th className="py-2">ID</th>
                         <th className="py-2">User ID</th>
                         <th className="py-2">Action</th>
                         <th className="py-2">Timestamp</th>
@@ -46,9 +48,10 @@ const Bitacora = () => {
                 <tbody>
                     {logs.map(log => (
                         <tr key={log.id}>
+                            <td className="py-2">{log.id}</td>
                             <td className="py-2">{log.userid}</td>
                             <td className="py-2">{log.action}</td>
-                            <td className="py-2">{new Date(log.timestamp).toLocaleString()}</td>
+                            <td className="py-2">{moment(log.timestamp).tz('America/La_Paz').format('YYYY-MM-DD HH:mm:ss')}</td>
                         </tr>
                     ))}
                 </tbody>

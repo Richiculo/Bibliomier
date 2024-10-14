@@ -1,4 +1,6 @@
 const { createUser, getUserByEmail,getUsers,updateUserRole } = require('../models/userModel');
+const { logUserActivity } = require('../models/userActivityLogModel');
+const pool = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -16,6 +18,7 @@ const rolid = req.body.rol||1;
         
         const newUser = await createUser({ nombre, email, password,rolid });
         res.status(201).json({ message: 'Usuario registrado con éxito', user: newUser });
+        await logUserActivity(user.usuarioid, 'Registro de usuario');
     } catch (error) {
         res.status(500).json({ message: 'Error en el registro', error });
     }
@@ -45,8 +48,10 @@ const loginUser = async (req, res) => {
         }
 
         // Generar el token JWT
-        const token = jwt.sign({ id: user.usuarioid, rol: user.rolid }, 'secretKey', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.usuarioid, nombre: user.nombre_usuario, rol: user.rolid }, 'secretKey', { expiresIn: '1h' });
         console.log("Token generado:", token);
+
+        await logUserActivity(user.usuarioid, 'Inicio de sesión');
 
         res.status(200).json({ message: 'Login exitoso', token, nombre: user.nombre_usuario });
     } catch (error) {

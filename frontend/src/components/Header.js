@@ -16,7 +16,7 @@ const Header = ({ isLoggedIn, user, handleLogout }) => {
                 {isLoggedIn ? (
                     <>
                         <span className="mr-4">Bienvenido, {user.nombre}</span>
-
+                        <Link to="/books" className="text-white hover:underline">Libros</Link>
                         {user.rol === 4 && (
                             <Link to="/admin" className="text-white hover:underline">Administrar</Link>
                         )}

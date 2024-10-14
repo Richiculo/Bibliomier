@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
@@ -9,6 +9,27 @@ const Login = ({ setIsLoggedIn, setUser }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Verifica si hay un token en localStorage al cargar el componente
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Si hay un token, decodifícalo y actualiza el estado
+            const decodedToken = jwtDecode(token);
+            const rol = decodedToken.rol;
+
+            // Actualiza el estado con los datos del usuario
+            setUser({ nombre: decodedToken.nombre, rol: rol });
+            setIsLoggedIn(true);
+
+            // Redirige al panel de administración si el rol es válido
+            if (rol === 4) {
+                navigate("/admin");
+            } else {
+                navigate("/books"); // O donde quieras redirigir
+            }
+        }
+    }, [setIsLoggedIn, setUser, navigate]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -18,9 +39,10 @@ const Login = ({ setIsLoggedIn, setUser }) => {
             // Decodificar el token JWT para extraer el rol
             const decodedToken = jwtDecode(response.data.token);
             const rol = decodedToken.rol;
+            const nombre = decodedToken.nombre;
 
             // Actualizar el estado con los datos del usuario, incluyendo el rol
-            setUser({ nombre: response.data.nombre, rol: rol });
+            setUser({ nombre: nombre, rol: rol });
             setIsLoggedIn(true);
             navigate("/admin");
         } catch (error) {
@@ -64,4 +86,3 @@ const Login = ({ setIsLoggedIn, setUser }) => {
 };
 
 export default Login;
-
