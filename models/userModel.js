@@ -54,7 +54,6 @@ const updateUserRole = async (userId, newRole) => {
 };
 
 const updatePassword = async (id, hashedPassword) => {
-    console.log('Actualizando nombre para el usuario ID:', userId, 'Nuevo nombre:', newName);
     const query = 'UPDATE usuario SET contraseña = $1 WHERE usuarioid = $2';
     await pool.query(query, [hashedPassword, id]);
 };

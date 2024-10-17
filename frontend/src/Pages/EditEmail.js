@@ -11,7 +11,7 @@ const EditEmail = ({ user }) => {
             await axios.put(`http://localhost:3000/api/users/correo/${user.id}`, { correo });
             setMessage('Correo actualizado exitosamente.');
         } catch (error) {
-            console.error('Error updating email:', error);
+            console.error('Error actualizando el correo:', error);
         }
     };
 

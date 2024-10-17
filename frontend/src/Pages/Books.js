@@ -8,6 +8,7 @@ const Books = () => {
     const [categorias, setCategorias] = useState([]); // Estado para almacenar los géneros
     const [selectedCategoria, setSelectedCategoria] = useState(""); // Estado para la categoría seleccionada
 
+    //fetch para obtener todas las categorias de la caja
     const fetchCategorias = async () => {
         try {
             const response = await axios.get('http://localhost:3000/api/categorias');
@@ -21,6 +22,7 @@ const Books = () => {
         fetchCategorias();
     }, []);
 
+    //fetch de busqueda, ya sea por nombre o categoria
     const fetchLibros = useCallback(async () => {
         try {
             const response = await axios.get(`http://localhost:3000/api/search`, {
@@ -40,14 +42,14 @@ const Books = () => {
         fetchLibros();
     }, [fetchLibros]);
 
-    // Llama a la función para buscar libros por categoría al cambiar el género
+    // Llama a la función para buscar libros por categoría al cambiar la categoria selec
     const handleGenreChange = (e) => {
         setSelectedCategoria(e.target.value);
         fetchLibros(); 
     };
 
     
-
+//full diseño
     return (
         <div className="container mx-auto p-4">
             <h2 className="text-3xl font-bold text-center mb-6">Buscar Libros</h2>
@@ -56,7 +58,7 @@ const Books = () => {
             <div className="flex justify-center mb-4">
                 <select
                     value={selectedCategoria}
-                    onChange={handleGenreChange} // Cambiado para usar la nueva función
+                    onChange={handleGenreChange} // funcion para que busque al cambio de cat
                     className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"
                 >
                     <option value="">Todas las categorías</option>

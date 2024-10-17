@@ -92,6 +92,7 @@ const delLibro = async (req, res) => {
     }
 };
 
+//para sacar todas las categorias
 const categorias = async (req, res) => {
     try {
         const categ = await getCategorias();
@@ -103,7 +104,7 @@ const categorias = async (req, res) => {
     }
 };
 
-
+//busqueda por nombre o categoria
 const searchLibros = async (req, res) => {
     const { search, categoriaid } = req.query; // Obtenemos tanto el término de búsqueda como el ID de la categoría
     try {

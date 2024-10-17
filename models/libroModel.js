@@ -106,7 +106,7 @@ const getCategorias  = async () => {
         throw error;
     }
 }
-
+//todos los libros por categoria
 const getLibroxCategoria  = async (id) => {
     try {
 const result = await pool.query('SELECT * FROM libros WHERE categoriaid = $1', [id]);        
@@ -117,6 +117,7 @@ const result = await pool.query('SELECT * FROM libros WHERE categoriaid = $1', [
     }
 }
 
+//Consulta para que devuelva los detalles del libro (nombre de autor, nombre editorial etc...)
 const getBookDetails = async (id) => {
     const query = `
         SELECT libros.*, autor.nombre AS autor, editoriales.nombre_editorial AS editorial, categorias.nombre_categoria AS categoria
