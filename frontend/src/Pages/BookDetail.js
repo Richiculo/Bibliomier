@@ -11,7 +11,7 @@ const BookDetail = () => {
         setBook(null)
         const fetchBook = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api//libros/${id}`); // Asegúrate de incluir el URL completo
+                const response = await axios.get(`http://localhost:3000/api//libros/${id}`);
                 setBook(response.data);
             } catch (error) {
                 console.error('Error obteniendo los detalles del libro', error);
@@ -26,12 +26,14 @@ const BookDetail = () => {
     }
 
     return (
-        <div>
-            <h1>{book.titulo}</h1>
-            <p>Autor: {book.autorid}</p> {/* Asegúrate de que este campo sea correcto */}
-            <p>Género: {book.genero}</p>
-            <p>Editorial: {book.editorialid}</p> {/* Considera hacer una consulta para obtener el nombre de la editorial */}
-            <p>Categoría: {book.categoriaid}</p> {/* Considera hacer una consulta para obtener el nombre de la categoría */}
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="p-6">
+                <h1 className="text-3xl font-bold text-center mb-4">{book.titulo}</h1>
+                <p className="text-lg"><strong>Autor:</strong> {book.autor}</p>
+                <p className="text-lg"><strong>Género:</strong> {book.genero}</p>
+                <p className="text-lg"><strong>Editorial:</strong> {book.editorial}</p>
+                <p className="text-lg"><strong>Categoría:</strong> {book.categoria}</p>
+            </div>
         </div>
     );
 };

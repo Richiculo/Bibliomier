@@ -7,20 +7,20 @@ import DeleteBookForm from './DeleteBooksForm';
 
 const ModificarCatalogo = () => {
     return (
-        <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-lg space-y-6">
-            <h2 className="text-2xl font-bold text-gray-700 mb-4">Modificar Catálogo</h2>
-            <div className="space-y-4">
-                <Link to="agregar-libro" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
-                    Agregar Libro
+        <div className="max-w-2xl mx-auto p-8 bg-white-100 rounded-lg shadow-lg">
+            <h2 className="text-3xl font-extrabold text-blue-700 mb-6 text-center">Modificar Catálogo</h2>
+            <div className="space-y-6">
+                <Link to="agregar-libro" className="block w-full bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 text-center shadow-lg">
+                    ➕ Agregar Libro
                 </Link>
-                <Link to="obtener-libros" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
-                    Obtener Libros
+                <Link to="obtener-libros" className="block w-full bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 text-center shadow-lg">
+                    📚 Obtener Libros
                 </Link>
-                <Link to="actualizar-libro" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
-                    Actualizar Libro
+                <Link to="actualizar-libro" className="block w-full bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 text-center shadow-lg">
+                    ✏️ Actualizar Libro
                 </Link>
-                <Link to="eliminar-libro" className="block w-full bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 text-center">
-                    Eliminar Libro
+                <Link to="eliminar-libro" className="block w-full bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 text-center shadow-lg">
+                    ❌ Eliminar Libro
                 </Link>
             </div>
 

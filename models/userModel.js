@@ -53,9 +53,49 @@ const updateUserRole = async (userId, newRole) => {
     }
 };
 
+const updatePassword = async (id, hashedPassword) => {
+    console.log('Actualizando nombre para el usuario ID:', userId, 'Nuevo nombre:', newName);
+    const query = 'UPDATE usuario SET contraseña = $1 WHERE usuarioid = $2';
+    await pool.query(query, [hashedPassword, id]);
+};
+
+const updateName = async (userId, newName) => {
+    try {
+        const result = await pool.query(
+            'UPDATE usuario SET nombre_usuario = $1 WHERE usuarioid = $2 RETURNING *', // Asegúrate de usar RETURNING *
+            [newName, userId]
+        );
+
+        // Devuelve el usuario actualizado
+        return result.rows[0]; // Asegúrate de que hay un usuario actualizado
+    } catch (error) {
+        console.error('Error actualizando el nombre del usuario:', error);
+        throw error; // Propaga el error para manejarlo en el controlador
+    }
+};
+
+const updateCorreo = async (userId, newCorreo) => {
+    try {
+        const result = await pool.query(
+            'UPDATE usuario SET correo_electronico = $1 WHERE usuarioid = $2',
+            [newCorreo, userId]
+        );
+        
+        // Devuelve el usuario actualizado
+        return result.rowCount > 0; // Retorna true si la actualización fue exitosa
+    } catch (error) {
+        console.error('Error actualizando el correo del usuario:', error);
+        throw error; // Propaga el error para manejarlo en el controlador
+    }
+};
+
+
 module.exports = {
     createUser,
     getUserByEmail,
     getUsers,
-    updateUserRole
+    updateUserRole,
+    updatePassword,
+    updateName,
+    updateCorreo
 };

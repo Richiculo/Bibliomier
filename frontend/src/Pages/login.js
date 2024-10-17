@@ -18,7 +18,7 @@ const Login = ({ setIsLoggedIn, setUser }) => {
             const rol = decodedToken.rol;
 
             // Actualiza el estado con los datos del usuario
-            setUser({ nombre: decodedToken.nombre, rol: rol });
+            setUser({ id: decodedToken.id, nombre: decodedToken.nombre, correo: decodedToken.correo, rol: rol });
             setIsLoggedIn(true);
 
             // Redirige al panel de administración si el rol es válido
@@ -40,9 +40,11 @@ const Login = ({ setIsLoggedIn, setUser }) => {
             const decodedToken = jwtDecode(response.data.token);
             const rol = decodedToken.rol;
             const nombre = decodedToken.nombre;
+            const id = decodedToken.id;
+            const correo = decodedToken.correo;
 
             // Actualizar el estado con los datos del usuario, incluyendo el rol
-            setUser({ nombre: nombre, rol: rol });
+            setUser({ id: id, nombre: nombre, correo: correo, rol: rol });
             setIsLoggedIn(true);
             navigate("/admin");
         } catch (error) {

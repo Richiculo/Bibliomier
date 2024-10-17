@@ -1,5 +1,5 @@
 
-const { createLibro, getLibros, getLibroByName, updateLibro, deleteLibro,getLibrosbyid,prestamo } = require('../models/libroModel');
+const { createLibro, getLibros, getLibroByName, updateLibro, deleteLibro,getLibrosbyid,prestamo,getCategorias, getLibroxCategoria, getBookDetails } = require('../models/libroModel');
 
 // Controlador para agregar un nuevo libro
 const adLibro = async (req, res) => {
@@ -29,14 +29,14 @@ const prestamosLibro = async (req, res) => {
 const getLibroById = async (req, res) => {
     const libroId = req.params.id;
     try {
-        const libro = await getLibrosbyid(libroId);
-        if (libro.rows.length > 0) { // Asegúrate de usar 'length'
-            res.json(libro.rows[0]);
+        const libro = await getBookDetails(libroId);
+        if (libro) { 
+            res.json(libro);
         } else {
             res.status(404).json({ error: 'Libro no encontrado' });
         }
     } catch (error) {
-        console.error('Error obteniendo el libro', error); // Log más detallado
+        console.error('Error obteniendo el libro', error);
         res.status(500).json({ error: 'Error obteniendo el libro' });
     }
 };
@@ -52,18 +52,6 @@ const getLibro = async (req, res) => {
     } catch (error) {
         console.error('Error obteniendo los libros', error);
         res.status(500).json({ error: 'Error obteniendo los libros' });
-    }
-};
-
-// Controlador para obtener un libro por nombre
-const getbyName = async (req, res) => {
-    const query = req.query.search || '';  // Obtener el término de búsqueda desde los parámetros de consulta
-    try {
-        const libros = await getLibroByName(query);  // Pasar el query al modelo
-        res.json(libros);
-    } catch (error) {
-        console.error('Error buscando libros:', error);
-        res.status(500).json({ error: 'Error al buscar libros' });
     }
 };
 
@@ -104,12 +92,44 @@ const delLibro = async (req, res) => {
     }
 };
 
+const categorias = async (req, res) => {
+    try {
+        const categ = await getCategorias();
+        console.log(categ.rows);
+        res.json(categ.rows);
+    } catch (error) {
+        console.error('Error al obtener las categorías:', error);
+        res.status(500).json({ error: 'Error al obtener las categorías' });
+    }
+};
+
+
+const searchLibros = async (req, res) => {
+    const { search, categoriaid } = req.query; // Obtenemos tanto el término de búsqueda como el ID de la categoría
+    try {
+        let libros = [];
+        if (search) {
+            libros = await getLibroByName(search); // Llama a la función que busca por nombre
+        } else if (categoriaid) {
+            libros = await getLibroxCategoria(categoriaid); // Llama a la función que busca por categoría
+        } else {
+            return res.status(400).json({ error: 'Se debe proporcionar un término de búsqueda o un ID de categoría.' });
+        }
+
+        return res.json(libros);
+    } catch (error) {
+        console.error('Error buscando libros:', error);
+        res.status(500).json({ error: 'Error al buscar libros' });
+    }
+};
+
 module.exports = {
     adLibro,
     getLibro,
-    getbyName,
     updLibro,
     delLibro,
     getLibroById
-    , prestamosLibro
+    , prestamosLibro,
+    categorias,
+    searchLibros
 };

@@ -1,4 +1,4 @@
-const { createUser, getUserByEmail,getUsers,updateUserRole } = require('../models/userModel');
+const { createUser, getUserByEmail,getUsers,updateUserRole, updatePassword, updateName, updateCorreo } = require('../models/userModel');
 const { logUserActivity } = require('../models/userActivityLogModel');
 const pool = require('../db');
 const bcrypt = require('bcryptjs');
@@ -15,10 +15,9 @@ const rolid = req.body.rol||1;
             return res.status(400).json({ message: 'El usuario ya existe' });
         }
 
-        
         const newUser = await createUser({ nombre, email, password,rolid });
+        await logUserActivity(newUser.usuarioid, 'Registro');
         res.status(201).json({ message: 'Usuario registrado con éxito', user: newUser });
-        await logUserActivity(user.usuarioid, 'Registro de usuario');
     } catch (error) {
         res.status(500).json({ message: 'Error en el registro', error });
     }
@@ -48,7 +47,7 @@ const loginUser = async (req, res) => {
         }
 
         // Generar el token JWT
-        const token = jwt.sign({ id: user.usuarioid, nombre: user.nombre_usuario, rol: user.rolid }, 'secretKey', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.usuarioid, nombre: user.nombre_usuario, correo: user.correo_electronico, rol: user.rolid }, 'secretKey', { expiresIn: '1h' });
         console.log("Token generado:", token);
 
         await logUserActivity(user.usuarioid, 'Inicio de sesión');
@@ -82,14 +81,75 @@ const getUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error obteniendo los usuarios', error });
     }
-}
+};
 
+const updateUserPassword = async (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
 
+    try {
+        // Hashear la nueva contraseña
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Llama a la función del modelo para actualizar la contraseña en la base de datos
+        await updatePassword(id, hashedPassword);
+
+        res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+    } catch (error) {
+        console.error('Error al actualizar la contraseña:', error);
+        res.status(500).json({ error: 'Error al actualizar la contraseña' });
+    }
+};
+
+const updateUserName = async (req, res) => {
+    const userId = req.params.id;
+    const { nombre } = req.body; // Asegúrate de que el nombre esté en el cuerpo de la solicitud
+
+    try {
+        const updatedUser = await updateName(userId, nombre);
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Nombre actualizado con éxito', user: updatedUser });
+    } catch (error) {
+        console.error('Error al actualizar el nombre del usuario:', error);
+        res.status(500).json({ message: 'Error al actualizar el nombre del usuario', error });
+    }
+};
+
+const updateUserCorreo = async (req, res) => {
+    const { id } = req.params;
+    const { correo } = req.body;
+
+    try {
+        // Valida si el correo no está vacío
+        if (!correo) {
+            return res.status(400).json({ message: 'El correo es requerido' });
+        }
+
+        // Actualiza el correo en la base de datos
+        const correoActualizado = await updateCorreo(id, correo);
+
+        if (correoActualizado) {
+            return res.status(200).json({ message: 'Correo actualizado exitosamente' });
+        } else {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+    } catch (error) {
+        console.error('Error al actualizar el correo del usuario:', error);
+        return res.status(500).json({ message: 'Error al actualizar el correo del usuario', error });
+    }
+};
 
 
 module.exports = {
     registerUser,
     loginUser,
     getUser,
-    updateUserRoles
+    updateUserRoles,
+    updateUserPassword,
+    updateUserName,
+    updateUserCorreo
 };

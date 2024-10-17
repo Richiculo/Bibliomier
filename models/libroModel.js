@@ -96,6 +96,38 @@ const deleteLibro = async (id) => {
         throw error;
     }
 };
+//todas las categorias
+const getCategorias  = async () => {
+    try {
+        const result = await pool.query('SELECT * FROM categorias')
+        return result;
+    } catch (error) {
+        console.error('No se encontró ninguna categoria', error);
+        throw error;
+    }
+}
+
+const getLibroxCategoria  = async (id) => {
+    try {
+const result = await pool.query('SELECT * FROM libros WHERE categoriaid = $1', [id]);        
+    return result.rows;
+    } catch (error) {
+        console.error('No se encontró ninguna libro', error);
+        throw error;
+    }
+}
+
+const getBookDetails = async (id) => {
+    const query = `
+        SELECT libros.*, autor.nombre AS autor, editoriales.nombre_editorial AS editorial, categorias.nombre_categoria AS categoria
+        FROM libros
+        JOIN autor ON libros.autorid = autor.autorid
+        JOIN editoriales ON libros.editorialid = editoriales.editorialid
+        JOIN categorias ON libros.categoriaid = categorias.categoriaid
+        WHERE libros.libroid = $1`;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
+};
 
 module.exports = {
     createLibro,
@@ -104,7 +136,10 @@ module.exports = {
     updateLibro,
     deleteLibro,
     getLibrosbyid,
-    prestamo
+    prestamo,
+    getCategorias,
+    getLibroxCategoria,
+    getBookDetails
 };
 
 

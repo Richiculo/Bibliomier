@@ -9,14 +9,11 @@ const Header = ({ isLoggedIn, user, handleLogout }) => {
             <h1 className="text-lg font-bold">Biblioteca Alejandria</h1>
             <nav className="flex items-center space-x-4">
 
-                {isLoggedIn && user.rol !== 4 && (
-                    <Link to="/books" className="text-white hover:underline">Libros</Link>
-                )}
-
-                {isLoggedIn ? (
+                {isLoggedIn && (
                     <>
-                        <span className="mr-4">Bienvenido, {user.nombre}</span>
                         <Link to="/books" className="text-white hover:underline">Libros</Link>
+                        <span className="mr-4">Bienvenido, {user.nombre}</span>
+                        <Link to="/account" className="mr-4 text-white hover:underline">Gestionar Cuenta</Link>
                         {user.rol === 4 && (
                             <Link to="/admin" className="text-white hover:underline">Administrar</Link>
                         )}
@@ -28,7 +25,9 @@ const Header = ({ isLoggedIn, user, handleLogout }) => {
                             Cerrar Sesión
                         </button>
                     </>
-                ) : (
+                )}
+
+                {!isLoggedIn && (
                     <div className="flex space-x-4">
                         <Link to="/login">Iniciar Sesión</Link>
                         <Link to="/register">Crear Cuenta</Link>
@@ -40,5 +39,3 @@ const Header = ({ isLoggedIn, user, handleLogout }) => {
 };
 
 export default Header;
-
-
