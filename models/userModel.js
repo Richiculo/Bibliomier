@@ -21,7 +21,7 @@ const createUser = async ({ nombre, email, password, rol }) => {
 // Función para buscar usuario por email
 const getUserByEmail = async (email) => {
     try {
-        const result = await pool.query('SELECT * FROM Usuario WHERE correo_electronico = $1', [email]);
+        const result = await pool.query('SELECT u.*, m.miembroid FROM Usuario u LEFT JOIN miembros m ON u.usuarioid = m.usuarioid WHERE correo_electronico = $1', [email]);
         return result.rows[0];
     } catch (error) {
         console.error('Error buscando el usuario por email', error);

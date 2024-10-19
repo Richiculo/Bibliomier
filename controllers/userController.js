@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
         }
 
         // Generar el token JWT
-        const token = jwt.sign({ id: user.usuarioid, nombre: user.nombre_usuario, correo: user.correo_electronico, rol: user.rolid }, 'secretKey', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.usuarioid, miembroid: user.miembroid, nombre: user.nombre_usuario, correo: user.correo_electronico, rol: user.rolid }, 'secretKey', { expiresIn: '1h' });
         console.log("Token generado:", token);
 
         await logUserActivity(user.usuarioid, 'Inicio de sesión');

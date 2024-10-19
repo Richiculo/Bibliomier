@@ -18,7 +18,7 @@ router.get('/libros/:id', libroController.getLibroById);
 //ruta para el busqueda de libro (books.js)
 router.get('/search', searchLibros);
 router.post('/libros', adLibro);
-router.post('/prestamo/:id', crearNuevoPrestamo);
+
 
 router.put('/libros/:id',updLibro);
 router.delete('/libros/:id', delLibro);

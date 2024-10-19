@@ -120,12 +120,16 @@ const result = await pool.query('SELECT * FROM libros WHERE categoriaid = $1', [
 //Consulta para que devuelva los detalles del libro (nombre de autor, nombre editorial etc...)
 const getBookDetails = async (id) => {
     const query = `
-        SELECT libros.*, autor.nombre AS autor, editoriales.nombre_editorial AS editorial, categorias.nombre_categoria AS categoria
+        SELECT libros.*, autor.nombre AS autor, editoriales.nombre_editorial AS editorial, categorias.nombre_categoria AS categoria, 
+        json_agg(json_build_object('edicionid', ediciones.edicionid, 'fecha_publicacion', ediciones.fecha_publicacion)) AS ediciones
         FROM libros
         JOIN autor ON libros.autorid = autor.autorid
         JOIN editoriales ON libros.editorialid = editoriales.editorialid
         JOIN categorias ON libros.categoriaid = categorias.categoriaid
-        WHERE libros.libroid = $1`;
+        LEFT JOIN ediciones ON libros.libroid = ediciones.libroid  -- LEFT JOIN para incluir libros sin ediciones
+        WHERE libros.libroid = $1
+        GROUP BY libros.libroid, autor.nombre, editoriales.nombre_editorial, categorias.nombre_categoria`;
+    
     const result = await pool.query(query, [id]);
     return result.rows[0];
 };

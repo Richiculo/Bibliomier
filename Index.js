@@ -7,6 +7,7 @@ const editorialRoutes = require('./routes/editorialRoutes');
 const categoriaRoutes = require('./routes/categoriRoutes');
 const logActivity = require('./middleware/logUserActivity');
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
+const prestamoRoutes = require('./routes/prestamoRoutes');
 
 const app = express();
 const port = 3000;
@@ -29,6 +30,7 @@ app.use('/api', userRoutes);
 app.use('/api', editorialRoutes);
 app.use('/api', categoriaRoutes);
 app.use('/api', bitacoraRoutes);
+app.use('/api', prestamoRoutes);
 // Ruta de bienvenida
 app.get('/', (req, res) => {
     res.send('juany ta gozu!');
