@@ -50,6 +50,7 @@ const BookDetail = () => {
         if (user && book && disponible) {
             try {
                 await axios.post(`http://localhost:3000/api/prestamos`, {
+                    id: user.id,
                     miembroid: user.miembroid,  
                     edicionid: edicionidSeleccionada, 
                     fechaDevolucion: '2024-12-31' //se puede modificar a conveniencia

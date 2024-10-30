@@ -1,5 +1,5 @@
 const { crearPrestamo, verificarDisponibilidadLibro, verificarDisponibilidadEdicion, getEdiciones } = require('../models/prestamoModel');
-
+const { logUserActivity } = require('../models/userActivityLogModel');
 // Crear un nuevo préstamo
 const solicitarPrestamo = async (req, res) => {
     const { miembroid, edicionid, fechaDevolucion } = req.body;
@@ -11,7 +11,7 @@ const solicitarPrestamo = async (req, res) => {
             return res.status(400).json({ message: 'El libro ya está prestado'});
         }
         const nuevoPrestamo = await crearPrestamo(miembroid, edicionid, fechaDevolucion);
-
+        await logUserActivity(id, `Prestamo realizado de la edición: ${edicionid}`);
         return res.status(201).json({ message: 'Préstamo creado con éxito', prestamo: nuevoPrestamo });
     } catch (error) {
         console.error('Error al solicitar préstamo:', error);

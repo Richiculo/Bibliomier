@@ -31,6 +31,7 @@ app.use('/api', editorialRoutes);
 app.use('/api', categoriaRoutes);
 app.use('/api', bitacoraRoutes);
 app.use('/api', prestamoRoutes);
+
 // Ruta de bienvenida
 app.get('/', (req, res) => {
     res.send('juany ta gozu!');

@@ -16,6 +16,7 @@ import GetAllUsuarios from "./Pages/GetAllUsuarios";
 import AdministrarRoles from "./Pages/AdministrarRoles";
 import Bitacora from "./components/Bitacora";
 import AccountForm from "./Pages/AccountForm";
+import GestionarPrestamos from './Pages/GestionarPrestamos';
 import { jwtDecode } from 'jwt-decode';
 import './index.css';
 
@@ -28,7 +29,6 @@ function App() {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
-            console.log('Decoded token:', decodedToken);
             const userData = { id: decodedToken.id, nombre: decodedToken.nombre, correo: decodedToken.correo, rol: decodedToken.rol }; // Asegúrate de que el nombre esté en el token
             
             setUser(userData);
@@ -51,6 +51,12 @@ function App() {
                 <Route path="/books" element={<Books />} />
                 <Route path="/libro/:id" element={<BookDetail />} />
                 <Route path="/account/*" element={<AccountForm user={user} />} />
+
+                {isLoggedIn && user.rol === 4 && (
+                    <>
+                        <Route path="/gestionar-prestamos" element={<GestionarPrestamos />} />
+                    </>
+                )}
 
                 {isLoggedIn && user.rol === 4 && (
                     <>

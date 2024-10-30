@@ -1,8 +1,56 @@
-const { createUser, getUserByEmail,getUsers,updateUserRole, updatePassword, updateName, updateCorreo } = require('../models/userModel');
+const { createUser, getUserByEmail,getUsers,updateUserRole, updatePassword, updateName, updateCorreo, getPrestamosActivos, setReseña } = require('../models/userModel');
 const { logUserActivity } = require('../models/userActivityLogModel');
 const pool = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+
+const hacerReseña = async (req, res) => {
+    const { miembroid, edicionid, libroid, calificacion, comentario } = req.body;
+
+    try {
+        const newReseña = await setReseña(miembroid, edicionid, libroid, calificacion, comentario);
+        res.status(201).json({ message: 'Reseña creada con éxito.', data: newReseña });
+    } catch (error) {
+        console.error('Error al crear la reseña:', error);
+        res.status(500).json({ message: 'Error al crear la reseña.' });
+    }
+};
+
+//adiciones para la nube (gestion de prestamo)
+
+const prestamosActivos = async (req, res) => {
+    const { miembroid } = req.params;
+    try {
+        const prestamos = await getPrestamosActivos(miembroid);
+        console.log('prestamos', prestamos);
+        if (!prestamos || prestamos.length === 0) {
+            return res.status(404).json({ message: 'No tienes préstamos activos.' });
+        }
+
+        res.status(200).json(prestamos);
+    } catch (error) {
+        console.error('Error al obtener préstamos activos:', error);
+        res.status(500).json({ message: 'Error al obtener los préstamos activos' });
+    }
+};
+
+//devolver prestamo manual
+const prestamosDevolver = async (req, res) => {
+    const { prestamoid } = req.body;
+    
+    try {
+        // Aquí deberías tener una consulta SQL para actualizar el estado del préstamo
+        console.log('id del prestamo:',prestamoid)
+        await pool.query(`UPDATE prestamos SET estado = 'devuelto' WHERE prestamoid = $1`, [prestamoid]);
+        res.status(200).json({ message: 'Préstamo devuelto con éxito.' });
+    } catch (error) {
+        console.error('Error al devolver el préstamo:', error);
+        res.status(500).json({ message: 'Error al devolver el préstamo.' });
+    }
+};
+
+//
 
 // Controlador para registrar un nuevo usuario
 const registerUser = async (req, res) => {
@@ -66,6 +114,7 @@ const updateUserRoles = async (req, res) => {
 
     try {
         const updatedUser = await updateUserRole(userId, newRole);
+        await logUserActivity(userId, `Actualización de rol a ${newRole}`);
         console.log('Usuario actualizado:', updatedUser);
         res.status(200).json({ message: 'Rol actualizado con éxito', user: updatedUser });
     } catch (error) {
@@ -93,7 +142,7 @@ const updateUserPassword = async (req, res) => {
 
         // Llama a la función del modelo para actualizar la contraseña en la base de datos
         await updatePassword(id, hashedPassword);
-
+        await logUserActivity(id, `Cambio de contraseña de usuario`);
         res.status(200).json({ message: 'Contraseña actualizada con éxito' });
     } catch (error) {
         console.error('Error al actualizar la contraseña:', error);
@@ -111,7 +160,7 @@ const updateUserName = async (req, res) => {
         if (!updatedUser) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
-
+        await logUserActivity(id, `Cambio de nombre de usuario a ${nombre}`);
         res.status(200).json({ message: 'Nombre actualizado con éxito', user: updatedUser });
     } catch (error) {
         console.error('Error al actualizar el nombre del usuario:', error);
@@ -131,7 +180,6 @@ const updateUserCorreo = async (req, res) => {
 
         // Actualiza el correo en la base de datos
         const correoActualizado = await updateCorreo(id, correo);
-
         if (correoActualizado) {
             return res.status(200).json({ message: 'Correo actualizado exitosamente' });
         } else {
@@ -151,5 +199,8 @@ module.exports = {
     updateUserRoles,
     updateUserPassword,
     updateUserName,
-    updateUserCorreo
+    updateUserCorreo,
+    prestamosActivos,
+    prestamosDevolver, 
+    hacerReseña
 };

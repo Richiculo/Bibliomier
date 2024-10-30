@@ -1,6 +1,37 @@
 const pool = require('../db');
 const bcrypt = require('bcryptjs');
 
+//hacer reseña
+const setReseña = async (miembroid, edicionid, libroid, calificacion, comentario) => {
+    const query = `
+        INSERT INTO reseña (miembroid, edicionid, libroid, calificacion, comentario, fecha_reseña)
+        VALUES ($1, $2, $3, $4, $5, NOW())
+        RETURNING *;
+    `;
+    const values = [miembroid, edicionid, libroid, calificacion, comentario];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+};
+
+//adicion para gestion de prestamo
+const getPrestamosActivos = async (id) => {
+    try {
+        const prestamos = await pool.query(`
+            SELECT p.prestamoid, l.libroid, l.titulo, e.edicionid, e.numero_edicion, fecha_devolucion
+            FROM prestamos p, ediciones e, libros l
+            WHERE miembroid = $1 AND estado = 'activo' 
+            and p.edicionid = e.edicionid and e.libroid = l.libroid
+
+        `, [id]);
+        return prestamos.rows;
+    } catch (error) {
+        console.error('Error obteniendo los prestamos', error);
+        throw error;
+    }
+};
+
+
+
 // Función para crear un nuevo usuario
 const createUser = async ({ nombre, email, password, rol }) => {
 
@@ -96,5 +127,7 @@ module.exports = {
     updateUserRole,
     updatePassword,
     updateName,
-    updateCorreo
+    updateCorreo,
+    getPrestamosActivos,
+    setReseña
 };
