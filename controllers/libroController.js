@@ -1,5 +1,17 @@
 
-const { createLibro, getLibros, getLibroByName, updateLibro, deleteLibro,getLibrosbyid,prestamo,getCategorias, getLibroxCategoria, getBookDetails } = require('../models/libroModel');
+const { createLibro, getLibros, getLibroByName, updateLibro, deleteLibro,getLibrosbyid,prestamo,getCategorias, getLibroxCategoria, getBookDetails, buscarLibrosAvanzado } = require('../models/libroModel');
+
+
+const buscarLibros = async (req, res) => {
+    try {
+        const { search, categoriaid, autor, calificacion, isbn } = req.query;
+        const libros = await buscarLibrosAvanzado(search, categoriaid, autor, calificacion, isbn);
+        res.json(libros);
+    } catch (error) {
+        console.error("Error en la búsqueda de libros:", error);
+        res.status(500).json({ error: 'Error al buscar libros' });
+    }
+};
 
 // Controlador para agregar un nuevo libro
 const adLibro = async (req, res) => {
@@ -132,5 +144,6 @@ module.exports = {
     getLibroById
     , prestamosLibro,
     categorias,
-    searchLibros
+    searchLibros,
+    buscarLibros
 };
